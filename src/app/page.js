@@ -60,68 +60,6 @@ export default function Home() {
   }
 
   if (!session) return null;
-
-  const handleAdd = async () => {
-    if (todoInput === "") return alert("Please Enter Todo");
-    const response = await fetch(
-      "https://ecommercedb-five.vercel.app/api/todo",
-      {
-        method: "POST",
-        body: JSON.stringify({ title: todoInput, email: session.user?.email }),
-        headers: { "Content-Type": "application/json" },
-      },
-    );
-    const data = await response.json();
-    alert(data.message);
-    setTodoInput("");
-    isEdit(false);
-    setIsID("");
-    fetchData();
-  };
-
-  const haldleUpdate = async () => {
-    if (todoInput === "") return alert("Please Enter Todo");
-    const response = await fetch(
-      `https://ecommercedb-five.vercel.app/api/todo/${isId}`,
-      {
-        method: "PUT",
-        body: JSON.stringify({ title: todoInput }),
-        headers: { "Content-Type": "application/json" },
-      },
-    );
-    const data = await response.json();
-    alert(data.message);
-    setTodoInput("");
-    isEdit(false);
-    setIsID("");
-    fetchData();
-  };
-
-  const haldleEdit = (todo) => {
-    isEdit(true);
-    setTodoInput(todo.title);
-    setIsID(todo._id);
-  };
-
-  const handleDelete = async (todo) => {
-    try {
-      const response = await fetch(
-        `https://ecommercedb-five.vercel.app/api/todo/${todo._id}`,
-        {
-          method: "DELETE",
-        },
-      );
-      const data = await response.json();
-      setTodoInput("");
-      isEdit(false);
-      setIsID("");
-      alert(data.message);
-      fetchData();
-    } catch (error) {
-      console.error("Delete failed:", error);
-    }
-  };
-
   return (
     <>
       <title>Todo Application</title>

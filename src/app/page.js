@@ -16,7 +16,7 @@ export default function Home() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      // fetchData();
+      // fetchData()
     }
   }, [status]);
 

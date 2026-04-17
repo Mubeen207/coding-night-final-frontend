@@ -5,39 +5,8 @@ import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 
 export default function Home() {
-  const [todoInput, setTodoInput] = useState("");
-  const [admin, setAdmin] = useState(false);
-  const [edit, isEdit] = useState(false);
-  const [todos, setTodos] = useState(null);
-  const [isId, setIsID] = useState("");
-
   const router = useRouter();
   const { data: session, status } = useSession();
-
-  const fetchData = async () => {
-    try {
-      const res = await fetch("https://ecommercedb-five.vercel.app/api/todos");
-      if (!res.ok) throw new Error("Server response issues");
-      const result = await res.json();
-      const allTodos = result.data;
-      console.log(allTodos);
-
-      let fillterdData = [];
-      if (session?.user?.email === "admin@gmail.com") {
-        fillterdData = allTodos;
-        setAdmin(true);
-      } else {
-        fillterdData = allTodos.filter(
-          (todo) => todo.email === session.user?.email,
-        );
-        setAdmin(false);
-      }
-
-      setTodos(fillterdData);
-    } catch (error) {
-      console.log("Server is not connecting...", error.message);
-    }
-  };
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -47,7 +16,7 @@ export default function Home() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      fetchData();
+      // fetchData();
     }
   }, [status]);
 
@@ -65,6 +34,7 @@ export default function Home() {
       <title>Todo Application</title>
 
       <div>WelCome</div>
+      <p onClick={signOut}>Sign Out</p>
     </>
   );
 }

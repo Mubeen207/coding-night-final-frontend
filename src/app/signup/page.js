@@ -3,12 +3,14 @@ import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import ToTitleCase from "../components/ToTitleCase";
 
 export default function Login() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
   const { status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -16,40 +18,64 @@ export default function Login() {
     }
   }, [status, router]);
 
-  const handleLogin = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-
-    const data = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
+    const res = await fetch("/api/register", {
+      method: "POST",
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
-    if (data?.ok) {
-      alert("Welcome");
+    const { status: resStatus, message } = await res.json();
+    alert(message);
+    if (resStatus == 201) {
+      setName("");
       setEmail("");
       setPassword("");
-      router.replace("/");
-    } else {
-      alert("Invalid email or password");
+
+      await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
     }
   };
 
   return (
     <>
-      <title>Login | Todo App</title>
-
+      <title>Sign Up | Todo App</title>
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center px-4 py-10">
         <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-          <div className="text-center mb-10">
+          
+          <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-gray-800 tracking-tight">
-              Welcome Back
+              Create Account
             </h1>
             <p className="text-gray-500 mt-2 text-sm font-medium">
-              Login to manage your daily tasks
+              Join us to start organizing your tasks
             </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleSignUp} className="space-y-5">
+            <div className="space-y-1.5">
+              <label className="text-sm font-bold text-gray-700 ml-1">
+                Full Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(ToTitleCase(e.target.value))}
+                placeholder="Enter your name"
+                className="w-full py-3.5 border border-gray-200 rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium text-gray-700 bg-gray-50/50"
+                required
+              />
+            </div>
+
             <div className="space-y-1.5">
               <label className="text-sm font-bold text-gray-700 ml-1">
                 Email Address
@@ -58,7 +84,7 @@ export default function Login() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value.toLowerCase())}
-                placeholder="Email"
+                placeholder="name@example.com"
                 className="w-full py-3.5 border border-gray-200 rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium text-gray-700 bg-gray-50/50"
                 required
               />
@@ -72,27 +98,27 @@ export default function Login() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
+                placeholder="Create a strong password"
                 className="w-full py-3.5 border border-gray-200 rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium text-gray-700 bg-gray-50/50"
                 required
               />
             </div>
 
-            <input
-              type="submit"
-              value="login"
-              className="w-full py-4 text-white font-bold bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] transition-all rounded-xl shadow-lg shadow-indigo-100 cursor-pointer mt-4 uppercase tracking-wider"
+            <input 
+              type="submit" 
+              value="Signup" 
+              className="w-full py-4 text-white font-bold bg-orange-800 hover:bg-orange-900 active:scale-[0.98] transition-all rounded-xl shadow-lg shadow-orange-100 cursor-pointer mt-4"
             />
           </form>
 
           <div className="mt-10 text-center border-t border-gray-100 pt-6">
             <p className="text-gray-500 text-sm font-medium">
-              Don't have an account?{" "}
+              Have an account?{" "}
               <Link
-                href="/signup"
-                className="text-orange-700 hover:text-orange-800 font-extrabold ml-1 hover:underline transition-all"
+                href="/login"
+                className="text-indigo-600 hover:text-indigo-700 font-extrabold ml-1 hover:underline transition-all"
               >
-                Signup
+                Login
               </Link>
             </p>
           </div>

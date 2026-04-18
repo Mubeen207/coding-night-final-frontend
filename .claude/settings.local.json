@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npm run *)",
-      "Bash(taskkill /PID 32284 /F)"
+      "Bash(taskkill /PID 32284 /F)",
+      "Bash(npm install *)"
     ]
   }
 }

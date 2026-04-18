@@ -38,5 +38,6 @@ export const config = {
     '/leaderboard/:path*',
     '/ai-center/:path*',
     '/onboarding/:path*',
+    '/admin/:path*',
   ],
 };

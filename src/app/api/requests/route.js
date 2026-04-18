@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Request from "@/models/Request";
+import User from "@/models/User";
 import { getServerSession } from "next-auth/next";
 
 export async function GET(req) {
@@ -33,7 +34,15 @@ export async function POST(req) {
     const data = await req.json();
     
     // Add the requester ID explicitly from the session
-    data.requester = session.user.id || session.user._id || data.requesterId;
+    let requesterId = session.user.id || session.user._id || data.requesterId;
+    
+    // Fallback if session doesn't expose ID natively
+    if (!requesterId && session.user?.email) {
+      const user = await User.findOne({ email: session.user.email });
+      if (user) requesterId = user._id;
+    }
+    
+    data.requester = requesterId;
     
     const newRequest = await Request.create(data);
     return NextResponse.json(newRequest, { status: 201 });

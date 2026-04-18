@@ -1,0 +1,636 @@
+
+> coding-night-final-frontend@0.1.0 build
+> next build
+
+▲ Next.js 16.2.2 (Turbopack)
+- Environments: .env.local, .env
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 24 errors:
+./src/app/request/[id]/page.js:4:1
+Module not found: Can't resolve '../components/HeroCard'
+  [90m2 |[0m
+  [90m3 |[0m [36mimport[0m [33mReact[0m, { useEffect, useState } [36mfrom[0m [32m'react'[0m;
+[31m[1m>[0m [90m4 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'../components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m5 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m6 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m7 |[0m [36mimport[0m { useRouter, useParams } [36mfrom[0m [32m'next/navigation'[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/request/[id]/page.js [Client Component Browser]
+    ./src/app/request/[id]/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/request/[id]/page.js [Client Component SSR]
+    ./src/app/request/[id]/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/request/[id]/page.js:3:1
+Module not found: Can't resolve '../components/HeroCard'
+  [90m1 |[0m [32m"use client"[0m;
+  [90m2 |[0m [36mimport[0m [33mReact[0m, { useEffect, useState } [36mfrom[0m [32m'react'[0m;
+[31m[1m>[0m [90m3 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'../components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m5 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m6 |[0m [36mimport[0m { useRouter, useParams } [36mfrom[0m [32m'next/navigation'[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/request/[id]/page.js [Client Component Browser]
+    ./src/app/request/[id]/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/request/[id]/page.js [Client Component SSR]
+    ./src/app/request/[id]/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/ai-center/page.js:5:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m3 |[0m [36mimport[0m { c [36mas[0m _c } [36mfrom[0m [32m"react/compiler-runtime"[0m;
+  [90m4 |[0m [36mimport[0m [33mReact[0m [36mfrom[0m [32m'react'[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mAICenter[0m() {
+  [90m7 |[0m   [36mconst[0m $ = _c([35m19[0m);
+  [90m8 |[0m   [36mlet[0m t0;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/ai-center/page.js [Client Component Browser]
+    ./src/app/ai-center/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/ai-center/page.js [Client Component SSR]
+    ./src/app/ai-center/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/ai-center/page.js:3:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m1 |[0m [32m"use client"[0m;
+  [90m2 |[0m [36mimport[0m [33mReact[0m [36mfrom[0m [32m'react'[0m;
+[31m[1m>[0m [90m3 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m
+  [90m5 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mAICenter[0m() {
+  [90m6 |[0m   [36mreturn[0m (
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/ai-center/page.js [Client Component Browser]
+    ./src/app/ai-center/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/ai-center/page.js [Client Component SSR]
+    ./src/app/ai-center/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/create-request/page.js:6:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m4 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m5 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+[31m[1m>[0m [90m6 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m7 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mCreateRequest[0m() {
+  [90m8 |[0m   [36mconst[0m {
+  [90m9 |[0m     status
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/create-request/page.js [Client Component Browser]
+    ./src/app/create-request/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/create-request/page.js [Client Component SSR]
+    ./src/app/create-request/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/create-request/page.js:5:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m3 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m4 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m
+  [90m7 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mCreateRequest[0m() {
+  [90m8 |[0m   [36mconst[0m { status } = useSession();
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/create-request/page.js [Client Component Browser]
+    ./src/app/create-request/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/create-request/page.js [Client Component SSR]
+    ./src/app/create-request/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/dashboard/page.js:7:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m 5 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m 6 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+[31m[1m>[0m [90m 7 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 8 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mDashboard[0m() {
+  [90m 9 |[0m   [36mconst[0m {
+  [90m10 |[0m     data: session,
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/page.js [Client Component Browser]
+    ./src/app/dashboard/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/page.js [Client Component SSR]
+    ./src/app/dashboard/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/dashboard/page.js:6:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m4 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m5 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+[31m[1m>[0m [90m6 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m7 |[0m
+  [90m8 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mDashboard[0m() {
+  [90m9 |[0m   [36mconst[0m { data: session, status } = useSession();
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/page.js [Client Component Browser]
+    ./src/app/dashboard/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/page.js [Client Component SSR]
+    ./src/app/dashboard/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/explore/page.js:4:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m2 |[0m
+  [90m3 |[0m [36mimport[0m [33mReact[0m, { useEffect, useState } [36mfrom[0m [32m'react'[0m;
+[31m[1m>[0m [90m4 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m5 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m6 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m7 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/explore/page.js [Client Component Browser]
+    ./src/app/explore/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/explore/page.js [Client Component SSR]
+    ./src/app/explore/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/explore/page.js:3:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m1 |[0m [32m"use client"[0m;
+  [90m2 |[0m [36mimport[0m [33mReact[0m, { useEffect, useState } [36mfrom[0m [32m'react'[0m;
+[31m[1m>[0m [90m3 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m5 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m6 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/explore/page.js [Client Component Browser]
+    ./src/app/explore/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/explore/page.js [Client Component SSR]
+    ./src/app/explore/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/leaderboard/page.js:4:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m2 |[0m
+  [90m3 |[0m [36mimport[0m [33mReact[0m, { useEffect, useState } [36mfrom[0m [32m'react'[0m;
+[31m[1m>[0m [90m4 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m5 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m6 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+  [90m7 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mLeaderboard[0m() {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/leaderboard/page.js [Client Component Browser]
+    ./src/app/leaderboard/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/leaderboard/page.js [Client Component SSR]
+    ./src/app/leaderboard/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/leaderboard/page.js:3:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m1 |[0m [32m"use client"[0m;
+  [90m2 |[0m [36mimport[0m [33mReact[0m, { useEffect, useState } [36mfrom[0m [32m'react'[0m;
+[31m[1m>[0m [90m3 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m5 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+  [90m6 |[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/leaderboard/page.js [Client Component Browser]
+    ./src/app/leaderboard/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/leaderboard/page.js [Client Component SSR]
+    ./src/app/leaderboard/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/login/page.js:7:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m 5 |[0m [36mimport[0m { signIn, useSession } [36mfrom[0m [32m"next-auth/react"[0m;
+  [90m 6 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m"next/navigation"[0m;
+[31m[1m>[0m [90m 7 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m"./components/HeroCard"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 8 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mLogin[0m() {
+  [90m 9 |[0m   [36mconst[0m $ = _c([35m48[0m);
+  [90m10 |[0m   [36mconst[0m [email, setEmail] = useState([32m"community@helphub.ai"[0m);
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/login/page.js [Client Component Browser]
+    ./src/app/login/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/login/page.js [Client Component SSR]
+    ./src/app/login/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/login/page.js:5:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m3 |[0m [36mimport[0m { signIn, useSession } [36mfrom[0m [32m"next-auth/react"[0m;
+  [90m4 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m"next/navigation"[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m"./components/HeroCard"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m
+  [90m7 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mLogin[0m() {
+  [90m8 |[0m   [36mconst[0m [email, setEmail] = useState([32m"community@helphub.ai"[0m);
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/login/page.js [Client Component Browser]
+    ./src/app/login/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/login/page.js [Client Component SSR]
+    ./src/app/login/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/messages/page.js:6:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m4 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m5 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+[31m[1m>[0m [90m6 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m7 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mMessages[0m() {
+  [90m8 |[0m   [36mconst[0m {
+  [90m9 |[0m     data: session,
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/messages/page.js [Client Component Browser]
+    ./src/app/messages/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/messages/page.js [Client Component SSR]
+    ./src/app/messages/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/messages/page.js:5:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m3 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m4 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m
+  [90m7 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mMessages[0m() {
+  [90m8 |[0m   [36mconst[0m { data: session, status } = useSession();
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/messages/page.js [Client Component Browser]
+    ./src/app/messages/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/messages/page.js [Client Component SSR]
+    ./src/app/messages/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/notifications/page.js:6:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m4 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m5 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+[31m[1m>[0m [90m6 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m7 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mNotifications[0m() {
+  [90m8 |[0m   [36mconst[0m {
+  [90m9 |[0m     status
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/notifications/page.js [Client Component Browser]
+    ./src/app/notifications/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/notifications/page.js [Client Component SSR]
+    ./src/app/notifications/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/notifications/page.js:5:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m3 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m4 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m
+  [90m7 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mNotifications[0m() {
+  [90m8 |[0m   [36mconst[0m { status } = useSession();
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/notifications/page.js [Client Component Browser]
+    ./src/app/notifications/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/notifications/page.js [Client Component SSR]
+    ./src/app/notifications/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/onboarding/page.js:6:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m4 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m5 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+[31m[1m>[0m [90m6 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m7 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mOnboarding[0m() {
+  [90m8 |[0m   [36mconst[0m {
+  [90m9 |[0m     data: session,
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/onboarding/page.js [Client Component Browser]
+    ./src/app/onboarding/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/onboarding/page.js [Client Component SSR]
+    ./src/app/onboarding/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/onboarding/page.js:5:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m3 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m4 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m
+  [90m7 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mOnboarding[0m() {
+  [90m8 |[0m   [36mconst[0m { data: session, status } = useSession();
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/onboarding/page.js [Client Component Browser]
+    ./src/app/onboarding/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/onboarding/page.js [Client Component SSR]
+    ./src/app/onboarding/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/profile/page.js:6:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m4 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m5 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+[31m[1m>[0m [90m6 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m7 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mProfile[0m() {
+  [90m8 |[0m   [36mconst[0m {
+  [90m9 |[0m     data: session,
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/profile/page.js [Client Component Browser]
+    ./src/app/profile/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/profile/page.js [Client Component SSR]
+    ./src/app/profile/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/profile/page.js:5:1
+Module not found: Can't resolve './components/HeroCard'
+  [90m3 |[0m [36mimport[0m { useSession } [36mfrom[0m [32m'next-auth/react'[0m;
+  [90m4 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m'next/navigation'[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m [33mHeroCard[0m [36mfrom[0m [32m'./components/HeroCard'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m
+  [90m7 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mProfile[0m() {
+  [90m8 |[0m   [36mconst[0m { data: session, status } = useSession();
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/profile/page.js [Client Component Browser]
+    ./src/app/profile/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/profile/page.js [Client Component SSR]
+    ./src/app/profile/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/signup/page.js:8:1
+Module not found: Can't resolve './components/ToTitleCase'
+  [90m 6 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m"next/navigation"[0m;
+  [90m 7 |[0m [36mimport[0m [33mReact[0m, { useEffect, useState } [36mfrom[0m [32m"react"[0m;
+[31m[1m>[0m [90m 8 |[0m [36mimport[0m [33mToTitleCase[0m [36mfrom[0m [32m"./components/ToTitleCase"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 9 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mLogin[0m() {
+  [90m10 |[0m   [36mconst[0m $ = _c([35m31[0m);
+  [90m11 |[0m   [36mconst[0m [name, setName] = useState([32m""[0m);
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/signup/page.js [Client Component Browser]
+    ./src/app/signup/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/signup/page.js [Client Component SSR]
+    ./src/app/signup/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/app/signup/page.js:6:1
+Module not found: Can't resolve './components/ToTitleCase'
+  [90m4 |[0m [36mimport[0m { useRouter } [36mfrom[0m [32m"next/navigation"[0m;
+  [90m5 |[0m [36mimport[0m [33mReact[0m, { useEffect, useState } [36mfrom[0m [32m"react"[0m;
+[31m[1m>[0m [90m6 |[0m [36mimport[0m [33mToTitleCase[0m [36mfrom[0m [32m"./components/ToTitleCase"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m7 |[0m
+  [90m8 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mLogin[0m() {
+  [90m9 |[0m   [36mconst[0m [name, setName] = useState([32m""[0m);
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/signup/page.js [Client Component Browser]
+    ./src/app/signup/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/signup/page.js [Client Component SSR]
+    ./src/app/signup/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (./src/app/request/[id]/page.js:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/request/[id]/page.js:3:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/ai-center/page.js:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/ai-center/page.js:3:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/create-request/page.js:6:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/create-request/page.js:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/dashboard/page.js:7:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/dashboard/page.js:6:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/explore/page.js:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/explore/page.js:3:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/leaderboard/page.js:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/leaderboard/page.js:3:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/login/page.js:7:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/login/page.js:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/messages/page.js:6:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/messages/page.js:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/notifications/page.js:6:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/notifications/page.js:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/onboarding/page.js:6:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/onboarding/page.js:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/profile/page.js:6:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/profile/page.js:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/signup/page.js:8:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/app/signup/page.js:6:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)

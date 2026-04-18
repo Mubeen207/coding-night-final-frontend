@@ -69,14 +69,14 @@ export default function Navbar() {
 
         {/* Right side Elements */}
         <div className="flex items-center gap-4 md:gap-6 text-sm font-medium">
-          {/* Live Community Signals (From image) */}
-          <div className="hidden md:flex items-center gap-2 text-gray-500">
+          {/* Live Community Signals */}
+          <Link href="/live" className="hidden md:flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-primary"></span>
             </span>
-            Live community signals
-          </div>
+            Live Community Signal
+          </Link>
 
           <div className="flex flex-wrap items-center gap-2">
             {status === "authenticated" ? (

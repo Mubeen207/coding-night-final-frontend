@@ -31,6 +31,7 @@ export default function Home() {
   if (!session) return null;
   return (
     <>
+    
       <title>Todo Application</title>
 
       <div>WelCome</div>

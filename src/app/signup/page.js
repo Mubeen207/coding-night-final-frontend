@@ -31,9 +31,10 @@ export default function Login() {
         "Content-Type": "application/json",
       },
     });
-    const { status: resStatus, message } = await res.json();
+    const {message , status} = await res.json();
     alert(message);
-    if (resStatus == 201) {
+    
+    if (status == 201 || status == 200) {
       setName("");
       setEmail("");
       setPassword("");

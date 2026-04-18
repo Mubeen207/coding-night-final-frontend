@@ -1,51 +1,43 @@
-import bcrypt, { compare } from "bcrypt";
-
+// import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt"
+import { connectDB } from "@/lib/mongodb";
+import User from "@/models/User";
 export async function getUsers() {
-  try {
-    const response = await fetch(
-      "https://ecommercedb-five.vercel.app/api/users",
-      {
-        cache: "no-store",
-      },
-    );
-
-    if (!response.ok) return [];
-    const result = await response.json();
-    return result.data;
-  } catch (error) {
-    return [];
-  }
+   console.log("getUsers done 1");
+   const res = await fetch("/api/users");
+   console.log("getUsers done 2");
+  const data = await res.json();
+  console.log(data);
+  
+  return data;
 }
 
 export async function getByEmail(email) {
-  const data = await getUsers();
-  if (!Array.isArray(data)) return null;
+  const users = await getUsers();
 
-  return data.find((user) => user.email === email);
+  return users.find((u) => u.email === email);
 }
 
 export async function verifyPassword(password, hashedPassword) {
-  return await compare(password, hashedPassword);
+  return await bcrypt.compare(password, hashedPassword);
 }
 
 export async function save(name, email, password) {
-  try {
-    const found = await getByEmail(email);
-    if (found) return { status: 400, message: "User already exists" };
+  await connectDB();
 
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const response = await fetch(
-      "https://ecommercedb-five.vercel.app/api/user",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password: hashedPassword }),
-      },
-    );
+  const exists = await User.findOne({ email });
 
-    if (!response.ok) throw new Error("DB Error");
-    return { status: 201, message: "User Created" };
-  } catch (error) {
-    return { status: 500, message: "Server Error" };
+  if (exists) {
+    return { status: 400, message: "User already exists" };
   }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  await User.create({
+    name,
+    email,
+    password: hashedPassword,
+  });
+
+  return { status: 201, message: "User Created" };
 }

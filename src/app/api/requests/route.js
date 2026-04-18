@@ -10,14 +10,21 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const category = searchParams.get("category");
     const urgency = searchParams.get("urgency");
+    const limit = searchParams.get("limit");
 
     let query = {};
     if (category && category !== "All categories") query.category = category;
     if (urgency && urgency !== "All urgency levels") query.urgency = urgency;
 
-    const requests = await Request.find(query)
+    let requestsQuery = Request.find(query)
       .populate("requester", "name location")
       .sort({ createdAt: -1 });
+
+    if (limit) {
+      requestsQuery = requestsQuery.limit(parseInt(limit));
+    }
+
+    const requests = await requestsQuery;
 
     return NextResponse.json(requests);
   } catch (error) {

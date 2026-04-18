@@ -22,7 +22,7 @@ const handler = NextAuth({
           });
 
           if (!user) {
-            return null; // IMPORTANT (not throw)
+            return null;
           }
 
           const isValid = await bcrypt.compare(
@@ -31,13 +31,14 @@ const handler = NextAuth({
           );
 
           if (!isValid) {
-            return null; // IMPORTANT
+            return null;
           }
 
           return {
             id: user._id.toString(),
             name: user.name,
             email: user.email,
+            role: user.role,
           };
         } catch (err) {
           console.log("AUTH ERROR:", err.message);
@@ -46,6 +47,23 @@ const handler = NextAuth({
       },
     }),
   ],
+
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id;
+        session.user.role = token.role;
+      }
+      return session;
+    },
+  },
 
   secret: process.env.NEXTAUTH_SECRET,
 

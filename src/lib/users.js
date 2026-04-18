@@ -22,7 +22,7 @@ export async function verifyPassword(password, hashedPassword) {
   return await bcrypt.compare(password, hashedPassword);
 }
 
-export async function save(name, email, password) {
+export async function save(name, email, password, role = "Both") {
   await connectDB();
 
   const exists = await User.findOne({ email });
@@ -37,6 +37,7 @@ export async function save(name, email, password) {
     name,
     email,
     password: hashedPassword,
+    role,
   });
 
   return { status: 201, message: "User Created" };

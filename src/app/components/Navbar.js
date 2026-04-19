@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
   const [notificationCount, setNotificationCount] = useState(0);
 
   useEffect(() => {
@@ -80,9 +81,20 @@ export default function Navbar() {
 
           <div className="flex flex-wrap items-center gap-2">
             {status === "authenticated" ? (
-              <Link href="/dashboard" className="bg-brand-primary hover:bg-emerald-700 text-white px-5 py-2 rounded-full transition-colors font-medium shadow-sm whitespace-nowrap">
-                Go to Dashboard
-              </Link>
+              <>
+                <Link href="/dashboard" className="bg-brand-primary hover:bg-emerald-700 text-white px-5 py-2 rounded-full transition-colors font-medium shadow-sm whitespace-nowrap">
+                  Go to Dashboard
+                </Link>
+                <button 
+                  onClick={async () => {
+                    await signOut({ redirect: false });
+                    window.location.href = "/";
+                  }} 
+                  className="bg-white border border-gray-200 hover:bg-gray-50 text-gray-800 px-5 py-2 rounded-full text-sm font-medium transition-colors shadow-sm whitespace-nowrap"
+                >
+                  Logout
+                </button>
+              </>
             ) : (
               <Link href="/login" className="bg-brand-primary hover:bg-emerald-700 text-white px-5 py-2 rounded-full transition-colors font-medium shadow-sm whitespace-nowrap">
                 Join the Platform

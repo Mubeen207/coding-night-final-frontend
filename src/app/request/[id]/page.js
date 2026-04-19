@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import HeroCard from '../../components/HeroCard';
+import ChatComponent from '../../components/ChatComponent';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
+import { Check, X, MessageCircle, Users } from 'lucide-react';
 
 export default function RequestDetail() {
   const { data: session, status } = useSession();
@@ -13,6 +15,9 @@ export default function RequestDetail() {
   const [loading, setLoading] = useState(true);
   const [isHelper, setIsHelper] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [hasOfferedHelp, setHasOfferedHelp] = useState(false);
+  const [myHelpOffer, setMyHelpOffer] = useState(null);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -33,14 +38,24 @@ export default function RequestDetail() {
         const data = await res.json();
         setRequest(data);
 
-        // Check if current user is a helper
+        // Check if current user is a helper and get offers
         const userRes = await fetch('/api/users/profile');
         if (userRes.ok) {
           const userData = await userRes.json();
+          setCurrentUser(userData);
+
           const isUserHelper = data.helpers?.some(h =>
             h._id?.toString() === userData._id?.toString()
           );
           setIsHelper(isUserHelper);
+
+          // Check if user has already offered help
+          const userOffer = data.helpOffers?.find(o =>
+            o.helperId?._id?.toString() === userData._id?.toString() ||
+            o.helperId?.toString() === userData._id?.toString()
+          );
+          setMyHelpOffer(userOffer);
+          setHasOfferedHelp(!!userOffer);
         }
       } else {
         router.push('/explore');
@@ -64,6 +79,33 @@ export default function RequestDetail() {
         const data = await res.json();
         alert(data.message);
         fetchRequest();
+      } else {
+        const errorData = await res.json();
+        alert(errorData.error || 'Error sending help offer');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleAcceptHelp = async (helperId, action) => {
+    setActionLoading(true);
+    try {
+      const res = await fetch('/api/help/accept', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ requestId: params.id, helperId, action })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        alert(data.message);
+        fetchRequest();
+      } else {
+        const errorData = await res.json();
+        alert(errorData.error || 'Error processing help request');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -131,7 +173,8 @@ export default function RequestDetail() {
     );
   }
 
-  const isOwner = request.requester?.email === session?.user?.email;
+  const isOwner = request.requester?.email === session?.user?.email ||
+                 request.requester?._id?.toString() === currentUser?._id?.toString();
   const aiSummary = generateAISummary(request.description);
 
   return (
@@ -190,17 +233,19 @@ export default function RequestDetail() {
           <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col sm:flex-row items-center gap-4">
             <p className="text-brand-primary text-[10px] font-bold tracking-widest uppercase mb-0 sm:mr-4">ACTIONS</p>
 
-            {!isOwner && (
+            {!isOwner && !request.assignedHelper && (
               <button
                 onClick={handleICanHelp}
-                disabled={actionLoading}
+                disabled={actionLoading || hasOfferedHelp}
                 className={`w-full sm:w-auto px-6 py-3 font-bold rounded-full text-sm text-center transition-colors shadow-sm ${
-                  isHelper
-                    ? 'bg-red-500 hover:bg-red-600 text-white'
+                  hasOfferedHelp
+                    ? 'bg-amber-100 text-amber-700 cursor-not-allowed'
                     : 'bg-brand-primary hover:bg-emerald-700 text-white'
                 }`}
               >
-                {actionLoading ? 'Processing...' : (isHelper ? 'Remove as helper' : 'I can help')}
+                {actionLoading ? 'Processing...' :
+                  hasOfferedHelp ? 'Help Offered' :
+                  'I can help'}
               </button>
             )}
 
@@ -260,6 +305,66 @@ export default function RequestDetail() {
               )}
             </div>
           </div>
+
+          {/* Help Offers - Only visible to request owner */}
+          {isOwner && request.helpOffers?.length > 0 && (
+            <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+              <div className="flex items-center gap-2 mb-4">
+                <Users className="w-4 h-4 text-brand-primary" />
+                <p className="text-brand-primary text-[10px] font-bold tracking-widest uppercase">HELP OFFERS</p>
+              </div>
+              <div className="space-y-3">
+                {request.helpOffers
+                  .filter(o => o.status === 'pending')
+                  .map((offer, idx) => (
+                    <div key={idx} className="bg-amber-50 p-4 rounded-2xl border border-amber-100">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center text-white text-xs font-bold">
+                          {offer.helperId?.name?.charAt(0) || '?'}
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm text-gray-900">{offer.helperId?.name || 'Someone'}</p>
+                          <p className="text-xs text-gray-500">
+                            Offered {new Date(offer.offeredAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleAcceptHelp(offer.helperId?._id || offer.helperId, 'accept')}
+                          disabled={actionLoading}
+                          className="flex-1 bg-brand-primary hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-full transition-colors flex items-center justify-center gap-1"
+                        >
+                          <Check className="w-4 h-4" /> Accept
+                        </button>
+                        <button
+                          onClick={() => handleAcceptHelp(offer.helperId?._id || offer.helperId, 'reject')}
+                          disabled={actionLoading}
+                          className="flex-1 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium px-4 py-2 rounded-full transition-colors flex items-center justify-center gap-1"
+                        >
+                          <X className="w-4 h-4" /> Decline
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+
+          {/* Chat Component - Visible to both request owner and assigned helper */}
+          {request.chatId && (isOwner || isHelper) && request.status !== 'Solved' && (
+            <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+              <div className="flex items-center gap-2 mb-4">
+                <MessageCircle className="w-4 h-4 text-brand-primary" />
+                <p className="text-brand-primary text-[10px] font-bold tracking-widest uppercase">CHAT</p>
+              </div>
+              <ChatComponent
+                requestId={params.id}
+                currentUser={currentUser}
+                otherUser={isOwner ? request.assignedHelper : request.requester}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

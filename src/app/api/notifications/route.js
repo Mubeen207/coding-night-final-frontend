@@ -8,21 +8,24 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 export async function GET(req) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    await connectDB();
-
-    const currentUser = await User.findOne({ email: session.user.email });
-    if (!currentUser) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const notifications = await Notification.find({ userId: currentUser._id })
-      .sort({ createdAt: -1 })
-      .limit(20);
+    await connectDB();
+    const userId = session.user.id;
 
-    return NextResponse.json(notifications);
+    const notifications = await Notification.find({ userId })
+      .populate("senderId", "name")
+      .populate("relatedRequestId", "title")
+      .sort({ createdAt: -1 })
+      .limit(50);
+
+    const unreadCount = await Notification.countDocuments({ userId, isRead: false });
+
+    return NextResponse.json({ notifications, unreadCount });
   } catch (error) {
+    console.error("Get notifications error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -50,19 +53,21 @@ export async function POST(req) {
 export async function PUT(req) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
     await connectDB();
-    const currentUser = await User.findOne({ email: session.user.email });
+    const userId = session.user.id;
 
-    // Mark all notifications as read
     await Notification.updateMany(
-      { userId: currentUser._id, isRead: false },
+      { userId, isRead: false },
       { isRead: true }
     );
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, message: "All notifications marked as read" });
   } catch (error) {
+    console.error("Mark all read error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

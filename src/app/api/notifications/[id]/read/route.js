@@ -4,7 +4,7 @@ import Notification from "@/models/Notification";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export async function GET(req) {
+export async function PATCH(req, { params }) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -12,16 +12,24 @@ export async function GET(req) {
     }
 
     await connectDB();
+    const { id: notificationId } = await params;
     const userId = session.user.id;
 
-    const count = await Notification.countDocuments({
-      userId,
-      isRead: false
+    const notification = await Notification.findOne({
+      _id: notificationId,
+      userId
     });
 
-    return NextResponse.json({ count });
+    if (!notification) {
+      return NextResponse.json({ error: "Notification not found" }, { status: 404 });
+    }
+
+    notification.isRead = true;
+    await notification.save();
+
+    return NextResponse.json({ success: true, notification });
   } catch (error) {
-    console.error("Notification count error:", error);
+    console.error("Mark read error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

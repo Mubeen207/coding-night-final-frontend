@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import HeroCard from '../components/HeroCard';
+import { Check, X, MessageCircle, Users } from 'lucide-react';
 
 export default function Notifications() {
   const { status } = useSession();
@@ -10,6 +11,7 @@ export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [markingRead, setMarkingRead] = useState(false);
+  const [actionLoading, setActionLoading] = useState(null);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -28,12 +30,55 @@ export default function Notifications() {
       const res = await fetch('/api/notifications');
       if (res.ok) {
         const data = await res.json();
-        setNotifications(data);
+        setNotifications(data.notifications || []);
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleHelpAction = async (notification, action) => {
+    setActionLoading(notification._id);
+    try {
+      const res = await fetch('/api/help/accept', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          requestId: notification.relatedRequestId,
+          helperId: notification.senderId,
+          action
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        alert(data.message);
+        fetchNotifications();
+        if (action === 'accept' && data.chatId) {
+          router.push(`/request/${notification.relatedRequestId}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const markAsRead = async (id) => {
+    try {
+      const res = await fetch(`/api/notifications/${id}/read`, {
+        method: 'PATCH'
+      });
+      if (res.ok) {
+        setNotifications(prev =>
+          prev.map(n => n._id === id ? { ...n, isRead: true } : n)
+        );
+      }
+    } catch (error) {
+      console.error('Error marking as read:', error);
     }
   };
 
@@ -68,8 +113,23 @@ export default function Notifications() {
         return 'bg-purple-100 text-purple-700';
       case 'Insight':
         return 'bg-orange-100 text-orange-700';
+      case 'Help':
+        return 'bg-amber-100 text-amber-700';
+      case 'Chat':
+        return 'bg-cyan-100 text-cyan-700';
       default:
         return 'bg-gray-100 text-gray-700';
+    }
+  };
+
+  const getTypeIcon = (type) => {
+    switch (type) {
+      case 'Help':
+        return <Users className="w-4 h-4" />;
+      case 'Chat':
+        return <MessageCircle className="w-4 h-4" />;
+      default:
+        return null;
     }
   };
 
@@ -138,28 +198,88 @@ export default function Notifications() {
             notifications.map((notification) => (
               <div
                 key={notification._id}
-                className={`bg-white p-6 rounded-2xl flex justify-between items-center shadow-sm border transition-colors cursor-pointer ${
-                  notification.isRead ? 'border-white hover:border-gray-100' : 'border-brand-primary/30 hover:border-brand-primary/50 bg-brand-primary/5'
+                className={`bg-white p-6 rounded-2xl shadow-sm border transition-colors ${
+                  notification.isRead ? 'border-white' : 'border-brand-primary/30 bg-brand-primary/5'
                 }`}
               >
-                <div className="flex-1">
-                  <p className={`text-base text-gray-900 mb-1 ${notification.isRead ? 'font-medium' : 'font-bold'}`}>
-                    {notification.message}
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded ${getTypeColor(notification.type)}`}>
-                      {notification.type}
-                    </span>
-                    <span className="text-sm font-medium text-gray-400">
-                      {formatTime(notification.createdAt)}
-                    </span>
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      {getTypeIcon(notification.type)}
+                      <p className={`text-base text-gray-900 ${notification.isRead ? 'font-medium' : 'font-bold'}`}>
+                        {notification.message}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded ${getTypeColor(notification.type)}`}>
+                        {notification.type}
+                      </span>
+                      <span className="text-sm font-medium text-gray-400">
+                        {formatTime(notification.createdAt)}
+                      </span>
+                      {!notification.isRead && (
+                        <button
+                          onClick={() => markAsRead(notification._id)}
+                          className="text-xs text-brand-primary hover:text-emerald-700 font-medium ml-2"
+                        >
+                          Mark as read
+                        </button>
+                      )}
+                    </div>
                   </div>
+                  <span className={`text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-full ml-4 ${
+                    notification.isRead ? 'bg-gray-100 text-gray-500' : 'bg-brand-primary/10 text-brand-primary'
+                  }`}>
+                    {notification.isRead ? 'Read' : 'Unread'}
+                  </span>
                 </div>
-                <span className={`text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-full ml-4 ${
-                  notification.isRead ? 'bg-gray-100 text-gray-500' : 'bg-brand-primary/10 text-brand-primary'
-                }`}>
-                  {notification.isRead ? 'Read' : 'Unread'}
-                </span>
+
+                {/* Action buttons for pending help offers */}
+                {notification.actionRequired && notification.helpStatus === 'pending' && notification.type === 'Help' && (
+                  <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100">
+                    <button
+                      onClick={() => handleHelpAction(notification, 'accept')}
+                      disabled={actionLoading === notification._id}
+                      className="flex-1 bg-brand-primary hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-full transition-colors flex items-center justify-center gap-2"
+                    >
+                      <Check className="w-4 h-4" />
+                      {actionLoading === notification._id ? 'Processing...' : 'Accept Help'}
+                    </button>
+                    <button
+                      onClick={() => handleHelpAction(notification, 'reject')}
+                      disabled={actionLoading === notification._id}
+                      className="flex-1 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium px-4 py-2 rounded-full transition-colors flex items-center justify-center gap-2"
+                    >
+                      <X className="w-4 h-4" />
+                      Decline
+                    </button>
+                  </div>
+                )}
+
+                {/* View request button for accepted help */}
+                {notification.helpStatus === 'accepted' && notification.type === 'Help' && (
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    <button
+                      onClick={() => router.push(`/request/${notification.relatedRequestId}`)}
+                      className="w-full bg-brand-primary/10 hover:bg-brand-primary/20 text-brand-primary text-sm font-medium px-4 py-2 rounded-full transition-colors"
+                    >
+                      Go to Chat
+                    </button>
+                  </div>
+                )}
+
+                {/* Go to chat for chat notifications */}
+                {notification.type === 'Chat' && (
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    <button
+                      onClick={() => router.push(`/request/${notification.relatedRequestId}`)}
+                      className="w-full bg-brand-primary/10 hover:bg-brand-primary/20 text-brand-primary text-sm font-medium px-4 py-2 rounded-full transition-colors flex items-center justify-center gap-2"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      View Chat
+                    </button>
+                  </div>
+                )}
               </div>
             ))
           )}

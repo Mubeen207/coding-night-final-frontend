@@ -7,7 +7,8 @@ import HeroCard from "../components/HeroCard";
 
 export default function Login() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -20,6 +21,32 @@ export default function Login() {
     }
   }, [status, router]);
 
+  const handleSendOtp = async (e) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, type: "login" }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setStep(2);
+      } else {
+        setError(data.message || "Failed to send OTP. Please try again.");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -27,7 +54,8 @@ export default function Login() {
 
     const data = await signIn("credentials", {
       email,
-      password,
+      otp,
+      action: "login",
       redirect: false,
     });
 
@@ -36,7 +64,7 @@ export default function Login() {
     if (data?.ok) {
       router.replace("/dashboard");
     } else {
-      setError("Invalid email or password");
+      setError(data?.error || "Invalid or expired OTP");
     }
   };
 
@@ -48,7 +76,7 @@ export default function Login() {
         <HeroCard
           label="COMMUNITY ACCESS"
           title="Enter the support network."
-          description="Sign in to access your community profile, ask for help, offer support, and track your contributions with our AI-powered platform."
+          description="Sign in to access your community profile, ask for help, offer support, and track your contributions with our passwordless AI-powered platform."
           className="h-full min-h-[500px] flex flex-col justify-center"
         >
           <ul className="space-y-4 text-gray-300 mt-6 pl-4 border-l-2 border-brand-primary/30">
@@ -58,7 +86,7 @@ export default function Login() {
             </li>
             <li className="flex items-start">
               <span className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-2 mr-3 flex-shrink-0"></span>
-              <span>Get AI-powered help request suggestions</span>
+              <span>Passwordless secure authentication via Email OTP</span>
             </li>
             <li className="flex items-start">
               <span className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-2 mr-3 flex-shrink-0"></span>
@@ -82,45 +110,69 @@ export default function Login() {
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-5">
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">
-                Email Address
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="w-full bg-white border border-gray-200 text-gray-900 text-base rounded-xl focus:ring-brand-primary focus:border-brand-primary block p-3.5 outline-none"
-                required
-              />
-            </div>
+          {step === 1 ? (
+            <form onSubmit={handleSendOtp} className="space-y-5">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value.toLowerCase())}
+                  placeholder="you@example.com"
+                  className="w-full bg-white border border-gray-200 text-gray-900 text-base rounded-xl focus:ring-brand-primary focus:border-brand-primary block p-3.5 outline-none"
+                  required
+                />
+              </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                className="w-full bg-white border border-gray-200 text-gray-900 text-base rounded-xl focus:ring-brand-primary focus:border-brand-primary block p-3.5 outline-none"
-                required
-              />
-            </div>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-brand-primary hover:bg-emerald-700 text-white font-medium rounded-xl text-lg px-5 py-4 text-center mt-4 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isLoading ? "Sending OTP..." : "Continue with Email"}
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleLogin} className="space-y-5">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700">
+                  Enter 6-digit OTP sent to {email}
+                </label>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, '').slice(0,6))}
+                  placeholder="Enter 6-digit code"
+                  className="w-full text-center tracking-[0.5em] font-mono font-bold text-2xl bg-white border border-brand-primary border-2 text-gray-900 rounded-xl focus:ring-brand-primary focus:border-brand-primary block p-4 outline-none placeholder:text-gray-300 placeholder:tracking-normal placeholder:font-sans placeholder:text-base placeholder:font-normal"
+                  required
+                  maxLength={6}
+                  pattern="[0-9]{6}"
+                />
+              </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-brand-primary hover:bg-emerald-700 text-white font-medium rounded-xl text-lg px-5 py-4 text-center mt-4 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {isLoading ? "Authenticating..." : "Sign In"}
-            </button>
-          </form>
+              <button
+                type="submit"
+                disabled={isLoading || otp.length !== 6}
+                className="w-full bg-brand-primary hover:bg-emerald-700 text-white font-medium rounded-xl text-lg px-5 py-4 text-center mt-4 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isLoading ? "Verifying..." : "Secure Sign In"}
+              </button>
 
-          <div className="mt-8 text-center">
+              <div className="text-center mt-4">
+                <button
+                   type="button"
+                   onClick={() => { setStep(1); setOtp(''); setError(''); }}
+                   className="text-sm text-gray-500 hover:text-brand-primary transition-colors hover:underline"
+                >
+                   Use a different email
+                </button>
+              </div>
+            </form>
+          )}
+
+          <div className="mt-8 text-center pt-6 border-t border-gray-100">
             <p className="text-gray-500 text-sm">
               Don&apos;t have an account?{" "}
               <Link

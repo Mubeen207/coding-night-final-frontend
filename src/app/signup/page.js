@@ -8,8 +8,9 @@ import ToTitleCase from "../components/ToTitleCase";
 export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [role, setRole] = useState("Both");
+  const [otp, setOtp] = useState("");
+  const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -22,42 +23,51 @@ export default function SignUp() {
     }
   }, [status, router]);
 
+  const handleSendOtp = async (e) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, type: "signup" }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setStep(2);
+      } else {
+        setError(data.message || "Failed to send OTP. Please try again.");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSignUp = async (e) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          role,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const data = await signIn("credentials", {
+        name,
+        email,
+        otp,
+        role,
+        action: "register",
+        redirect: false,
       });
 
-      const data = await res.json();
-
-      if (res.ok && (data.status === 201 || data.status === 200)) {
-        // Auto-login after successful registration
-        const signInResult = await signIn("credentials", {
-          email,
-          password,
-          redirect: false,
-        });
-
-        if (signInResult?.ok) {
-          router.replace("/dashboard");
-        } else {
-          router.replace("/login");
-        }
+      if (data?.ok) {
+        router.replace("/dashboard");
       } else {
-        setError(data.message || "Registration failed");
+        setError(data?.error || "Invalid or expired OTP");
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
@@ -76,7 +86,7 @@ export default function SignUp() {
               Create Account
             </h1>
             <p className="text-gray-500 mt-2 text-sm font-medium">
-              Join the community to ask for help and offer your skills
+              Join the community securely with Email Verification
             </p>
           </div>
 
@@ -86,77 +96,100 @@ export default function SignUp() {
             </div>
           )}
 
-          <form onSubmit={handleSignUp} className="space-y-5">
-            <div className="space-y-1.5">
-              <label className="text-sm font-bold text-gray-700 ml-1">
-                Full Name
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(ToTitleCase(e.target.value))}
-                placeholder="Enter your name"
-                className="w-full py-3.5 border border-gray-200 rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all font-medium text-gray-700 bg-gray-50/50"
-                required
-              />
-            </div>
+          {step === 1 ? (
+             <form onSubmit={handleSendOtp} className="space-y-5">
+              <div className="space-y-1.5">
+                <label className="text-sm font-bold text-gray-700 ml-1">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(ToTitleCase(e.target.value))}
+                  placeholder="Enter your name"
+                  className="w-full py-3.5 border border-gray-200 rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all font-medium text-gray-700 bg-gray-50/50"
+                  required
+                />
+              </div>
 
-            <div className="space-y-1.5">
-              <label className="text-sm font-bold text-gray-700 ml-1">
-                Email Address
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value.toLowerCase())}
-                placeholder="you@example.com"
-                className="w-full py-3.5 border border-gray-200 rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all font-medium text-gray-700 bg-gray-50/50"
-                required
-              />
-            </div>
+              <div className="space-y-1.5">
+                <label className="text-sm font-bold text-gray-700 ml-1">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value.toLowerCase())}
+                  placeholder="you@example.com"
+                  className="w-full py-3.5 border border-gray-200 rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all font-medium text-gray-700 bg-gray-50/50"
+                  required
+                />
+              </div>
 
-            <div className="space-y-1.5">
-              <label className="text-sm font-bold text-gray-700 ml-1">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Create a strong password"
-                className="w-full py-3.5 border border-gray-200 rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all font-medium text-gray-700 bg-gray-50/50"
-                required
-                minLength={6}
-              />
-            </div>
+              <div className="space-y-1.5">
+                <label className="text-sm font-bold text-gray-700 ml-1">
+                  I want to
+                </label>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-full py-3.5 border border-gray-200 rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all font-medium text-gray-700 bg-gray-50/50 outline-none"
+                  required
+                >
+                  <option value="Both">Ask for help & Offer help</option>
+                  <option value="Need Help">Ask for help</option>
+                  <option value="Can Help">Offer help</option>
+                </select>
+                <p className="text-xs text-gray-500 ml-1 mt-1">
+                  You can change this later in your profile
+                </p>
+              </div>
 
-            <div className="space-y-1.5">
-              <label className="text-sm font-bold text-gray-700 ml-1">
-                I want to
-              </label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="w-full py-3.5 border border-gray-200 rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all font-medium text-gray-700 bg-gray-50/50 outline-none"
-                required
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full py-4 text-white font-bold bg-brand-primary hover:bg-emerald-700 active:scale-[0.98] transition-all rounded-xl shadow-lg shadow-brand-primary/20 cursor-pointer mt-4 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                <option value="Both">Ask for help & Offer help</option>
-                <option value="Need Help">Ask for help</option>
-                <option value="Can Help">Offer help</option>
-              </select>
-              <p className="text-xs text-gray-500 ml-1 mt-1">
-                You can change this later in your profile
-              </p>
-            </div>
+                {isLoading ? "Generating OTP..." : "Get Verification Code"}
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleSignUp} className="space-y-5">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700">
+                  Enter 6-digit OTP sent to {email}
+                </label>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, '').slice(0,6))}
+                  placeholder="Enter 6-digit code"
+                  className="w-full text-center tracking-[0.5em] font-mono font-bold text-2xl bg-white border border-brand-primary border-2 text-gray-900 rounded-xl focus:ring-brand-primary focus:border-brand-primary block p-4 outline-none placeholder:text-gray-300 placeholder:tracking-normal placeholder:font-sans placeholder:text-base placeholder:font-normal"
+                  required
+                  maxLength={6}
+                  pattern="[0-9]{6}"
+                />
+              </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-4 text-white font-bold bg-brand-primary hover:bg-emerald-700 active:scale-[0.98] transition-all rounded-xl shadow-lg shadow-brand-primary/20 cursor-pointer mt-4 disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {isLoading ? "Creating account..." : "Create Account"}
-            </button>
-          </form>
+              <button
+                type="submit"
+                disabled={isLoading || otp.length !== 6}
+                className="w-full bg-brand-primary hover:bg-emerald-700 text-white font-medium rounded-xl text-lg px-5 py-4 text-center mt-4 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isLoading ? "Verifying & Creating..." : "Verify & Create Account"}
+              </button>
+
+              <div className="text-center mt-4">
+                <button
+                   type="button"
+                   onClick={() => { setStep(1); setOtp(''); setError(''); }}
+                   className="text-sm text-gray-500 hover:text-brand-primary transition-colors hover:underline"
+                >
+                   Go back and edit details
+                </button>
+              </div>
+            </form>
+          )}
 
           <div className="mt-10 text-center border-t border-gray-100 pt-6">
             <p className="text-gray-500 text-sm font-medium">

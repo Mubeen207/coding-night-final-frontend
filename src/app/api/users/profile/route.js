@@ -17,6 +17,7 @@ export async function GET(req) {
   }
 }
 
+
 export async function PUT(req) {
   try {
     const session = await getServerSession();

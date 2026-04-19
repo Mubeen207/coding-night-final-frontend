@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #119D88;
+  --color-brand-dark: #1A2421;
+  --color-brand-light: #FBFDFB;
+  --color-bg-base: #F8FAF9;
+  
+  --font-geist: var(--font-geist-sans);
+  --font-geist-mono: var(--font-geist-mono);
+}
+
+@layer base {
+  body {
+    @apply bg-bg-base text-[#111] antialiased min-h-screen relative overflow-x-hidden;
+    font-family: var(--font-geist-sans), sans-serif;
+  }
+}
+
+/* Background Soft Blur Gradients */
+.bg-gradient-blur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--color-bg-base);
+}
+
+.bg-gradient-blur::before {
+  content: "";
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(circle, rgba(162, 237, 218, 0.4) 0%, rgba(255,255,255,0) 70%);
+  filter: blur(80px);
+}
+
+.bg-gradient-blur::after {
+  content: "";
+  position: absolute;
+  top: 10%;
+  right: -5%;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(circle, rgba(255, 221, 186, 0.35) 0%, rgba(255,255,255,0) 70%);
+  filter: blur(100px);
+}
+
+/* Custom Scrollbar for sleekness */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
